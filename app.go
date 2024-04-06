@@ -2,14 +2,15 @@ package main
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 	"log"
+
+	"github.com/redis/go-redis/v9"
 )
 
 // App struct
 type App struct {
-	ctx context.Context
+	ctx    context.Context
+	client *redis.Client
 }
 
 // NewApp creates a new App application struct
@@ -17,17 +18,22 @@ func NewApp() *App {
 	return &App{}
 }
 
-type ResponseError struct {
-	Message string
-	Code    int
-}
-
-func (re *ResponseError) Error() string {
-	b, err := json.Marshal(re)
-	if err != nil {
-		return re.Message
+// TODO: refactor another struct
+// connect to redis
+func (a *App) Connect(address string) error {
+	log.Printf("Address received %v\n", address)
+	if len(address) == 0 {
+		return errors.New("Address is required")
 	}
-	return string(b)
+
+	a.client = redis.NewClient(&redis.Options{
+		Addr: address,
+	})
+	if _, err := a.client.Ping(context.Background()).Result(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 // startup is called when the app starts. The context is saved
@@ -36,21 +42,7 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-// Greet returns a greeting for the given name
-func (a *App) Greet(name string) (string, error) {
-	if name == "Danilo" {
-		log.Printf("Wrong name given\n")
-		return "", &ResponseError{Message: "I wont greet Danilo", Code: 400}
-	}
-	return fmt.Sprintf("Hello %s, It's show time!", name), nil
-}
-
-func (a *App) PrintSomethingOnScreen() string {
-	s := "Printing something"
-	log.Printf("%s\n", s)
-	return s
-}
-
 func (a *App) shutdown(ctx context.Context) {
+	// clean up resources
 	log.Printf("Closing application\n")
 }

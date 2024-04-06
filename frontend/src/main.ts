@@ -1,55 +1,32 @@
 import './style.css';
-import './app.css';
+import './main.css';
 
-import logo from './assets/images/logo-universal.png';
-import {Greet, PrintSomethingOnScreen} from '../wailsjs/go/main/App';
+import { Connect } from '../wailsjs/go/main/App';
 
-// Setup the greet function
-window.greet = async function () {
-	console.log("opa");
-	// Get name
-	let name = nameElement!.value;
-
-	// Check if the input is empty
-	if (name === "") return;
-
-	// Call App.Greet(name)
+window.connect = async () => {
 	try {
-		const result = await Greet(name);
-		resultElement!.innerHTML = result;
-	} catch (err: any) {
-		console.log(JSON.parse(err));
+		// TODO: validate
+		if (addressInput.value.length > 0) {
+			btnConnect.disabled = true;
+			connectingLabel.innerText = 'connecting...';
+			await Connect(addressInput.value)
+			connectingLabel.innerText = 'conectado';
+		}
+	} catch(err: any) {
+		connectingLabel.innerText = '';
+		console.error(err);
+	} finally {
+		btnConnect.disabled = false;
 	}
 };
 
-window.printSomethingOnScreen = async () => {
-	try {
-		const result = await PrintSomethingOnScreen();
-		console.log(result);
-	} catch (err: any) {
-		console.error(Err);
-	}
-};
-
-document.querySelector('#app')!.innerHTML = `
-    <img id="logo" class="logo">
-    <div class="result" id="result">Please enter your name below 👇</div>
-      <div class="input-box" id="input">
-        <input class="input" id="name" type="text" autocomplete="off" />
-        <button class="btn" onclick="greet()">Greet</button>
-      </div>
-			<button class="print" onclick="printSomethingOnScreen()">Print</button>
-			<a href="../another.html">Navigate</a>
-    </div>
-`;
-(document.getElementById('logo') as HTMLImageElement).src = logo;
-
-let nameElement = (document.querySelector("#name") as HTMLInputElement);
-nameElement.focus();
-let resultElement = document.querySelector("#result");
+const addressInput = document.querySelector('#address') as HTMLInputElement;
+const connectingLabel = document.querySelector('#connecting_label') as HTMLElement;
+const btnConnect = document.querySelector('#connect') as HTMLButtonElement;
+btnConnect?.addEventListener('click', window.connect);
 
 declare global {
 	interface Window {
-		greet: () => void;
+		connect: () => void;
 	}
 }
