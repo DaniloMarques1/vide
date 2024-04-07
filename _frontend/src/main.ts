@@ -11,6 +11,7 @@ window.connect = async () => {
 			connectingLabel.innerText = 'connecting...';
 			await Connect(addressInput.value)
 			connectingLabel.innerText = 'conectado';
+			window.location.replace('home.html');
 		}
 	} catch(err: any) {
 		connectingLabel.innerText = '';

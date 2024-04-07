@@ -3,8 +3,4 @@
 
 export function Connect(arg1:string):Promise<void>;
 
-export function Disconect():Promise<void>;
-
-export function Get(arg1:string):Promise<string>;
-
 export function GetAddress():Promise<string>;

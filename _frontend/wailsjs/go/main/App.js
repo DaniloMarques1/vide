@@ -6,14 +6,6 @@ export function Connect(arg1) {
   return window['go']['main']['App']['Connect'](arg1);
 }
 
-export function Disconect() {
-  return window['go']['main']['App']['Disconect']();
-}
-
-export function Get(arg1) {
-  return window['go']['main']['App']['Get'](arg1);
-}
-
 export function GetAddress() {
   return window['go']['main']['App']['GetAddress']();
 }

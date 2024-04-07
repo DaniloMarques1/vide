@@ -17,15 +17,14 @@ func main() {
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:            "Redis UI",
-		WindowStartState: options.Maximised,
+		Title:  "vide",
+		Width:  1024,
+		Height: 768,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
-		MinWidth:   1024,
-		MinHeight:  768,
-		OnStartup:  app.startup,
-		OnShutdown: app.shutdown,
+		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
+		OnStartup:        app.startup,
 		Bind: []interface{}{
 			app,
 		},

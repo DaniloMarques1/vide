@@ -1,0 +1,19 @@
+div {
+	padding: .5rem;
+	display: flex;
+	flex-direction: column;
+}
+
+div #input {
+	padding: 2rem 0;
+	;
+	flex-direction: row;
+}
+
+div input {
+	width: 30%;
+}
+
+div button {
+	width: 30%;
+}
